@@ -15,12 +15,12 @@ class PumpDumpCyriptopia:
     def get_secret(self):
         return str(config.api_key), str(config.secret)
 
-    def pumpDump(self, SYMBOL, percentageOfBtc=100, profitPercentage=30, buyingPercentage=1):
+    def pumpDump(self, SYMBOL, percentageOfBtc=100, profitPercentage=4, buyingPercentage=2):
         # do before entering coin to save the API call during the pump
         BALANCE_BTC, ERROR = self.API.get_balance('BTC')
         if ERROR is not None:
             print ERROR
-        PUMP_BALANCE = BALANCE_BTC * (percentageOfBtc / 100)
+        PUMP_BALANCE = BALANCE_BTC["Available"] * (percentageOfBtc / 100)
         COIN_PRICE, ERROR = self.API.get_market(SYMBOL + "_BTC")
         if ERROR is not None:
             print ERROR
@@ -39,7 +39,10 @@ class PumpDumpCyriptopia:
 
         # calculates the number of PUMP_COIN(s) to buy, taking into
         # consideration Cryptopia's 0.20% fee.
-        NUM_COINS = (PUMP_BALANCE - (PUMP_BALANCE * 0.00201)) / ASK_BUY
+        c_fee = 0.00201
+        print(PUMP_BALANCE)
+        a = PUMP_BALANCE * c_fee
+        NUM_COINS = float((PUMP_BALANCE - a)) / ASK_BUY
 
         BUY_PRICE = ASK_BUY * NUM_COINS
         SELL_PRICE = ASK_SELL * NUM_COINS
@@ -79,4 +82,4 @@ class PumpDumpCyriptopia:
         print '[*] PROFIT if sell order fills: {:.8f} BTC'.format(PROFIT)
 
 
-PumpDumpCyriptopia().pumpDump("XRP")
+PumpDumpCyriptopia().pumpDump("XPD")
