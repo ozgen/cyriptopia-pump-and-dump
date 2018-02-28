@@ -15,7 +15,7 @@ class PumpDumpCyriptopia:
     def get_secret(self):
         return str(config.api_key), str(config.secret)
 
-    def pumpDump(self, SYMBOL, percentageOfBtc=100, profitPercentage=4, buyingPercentage=2):
+    def pumpDump(self, SYMBOL, percentageOfBtc=100, profitPercentage=30, buyingPercentage=5):
         # do before entering coin to save the API call during the pump
         BALANCE_BTC, ERROR = self.API.get_balance('BTC')
         if ERROR is not None:
@@ -34,15 +34,19 @@ class PumpDumpCyriptopia:
         LAST_PRICE = COIN_SUMMARY['LastPrice']
         CLOSE_PRICE = COIN_SUMMARY['Close']
 
-        ASK_BUY = ASK_PRICE + (buyingPercentage / 100 * ASK_PRICE)
-        ASK_SELL = ASK_PRICE + (profitPercentage / 100 * ASK_PRICE)
+        ASK_BUY = ASK_PRICE + ((buyingPercentage / 100) * ASK_PRICE)
+        ASK_SELL = ASK_PRICE + ((profitPercentage / 100) * ASK_PRICE)
 
         # calculates the number of PUMP_COIN(s) to buy, taking into
         # consideration Cryptopia's 0.20% fee.
         c_fee = 0.00201
-        print(PUMP_BALANCE)
-        a = PUMP_BALANCE * c_fee
-        NUM_COINS = float((PUMP_BALANCE - a)) / ASK_BUY
+        cryptoipa_fee = PUMP_BALANCE * c_fee
+        NUM_COINS = float((PUMP_BALANCE - cryptoipa_fee)) / ASK_BUY
+
+        if LAST_PRICE > CLOSE_PRICE + 0.20 * CLOSE_PRICE:
+            print '\nYou joined too late or this was pre-pumped! \
+                       Close Price : {:.8f} . Last Price : {:.8f}'.format(CLOSE_PRICE, LAST_PRICE)
+            return
 
         BUY_PRICE = ASK_BUY * NUM_COINS
         SELL_PRICE = ASK_SELL * NUM_COINS
@@ -82,4 +86,4 @@ class PumpDumpCyriptopia:
         print '[*] PROFIT if sell order fills: {:.8f} BTC'.format(PROFIT)
 
 
-PumpDumpCyriptopia().pumpDump("XPD")
+PumpDumpCyriptopia().pumpDump("EC")
