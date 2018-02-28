@@ -86,4 +86,3 @@ class PumpDumpCyriptopia:
         print '[*] PROFIT if sell order fills: {:.8f} BTC'.format(PROFIT)
 
 
-PumpDumpCyriptopia().pumpDump("EC")
