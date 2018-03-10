@@ -15,7 +15,7 @@ class PumpDumpCyriptopia:
     def get_secret(self):
         return str(config.api_key), str(config.secret)
 
-    def pumpDump(self, SYMBOL, percentageOfBtc=100, profitPercentage=30, buyingPercentage=5):
+    def pumpDump(self, SYMBOL, percentageOfBtc=100, profitPercentage=70, buyingPercentage=30):
         # do before entering coin to save the API call during the pump
         BALANCE_BTC, ERROR = self.API.get_balance('BTC')
         if ERROR is not None:
@@ -59,7 +59,7 @@ class PumpDumpCyriptopia:
         if ERROR is not None:
             print ERROR
 
-        print TRADE
+        print "trade: ",TRADE
 
         print '\n[+] Placing sell order at {:.8f} (+{}%)...'.format(ASK_SELL, profitPercentage)
 
