@@ -5,6 +5,6 @@ This wrapper provides a friendly way to call Cryptopia API from a Python 2.7 scr
 ## Usage
 configure your gonfig file and run the script in the example 
 
-##Example
+## Example
 
-python Runner.py --symbol coin_name_to_pump
+`python Runner.py --symbol coin_name_to_pump`
